@@ -11,15 +11,6 @@
     #error "Software Serial is not supported on the ESP32"
 #endif
 
-#if !defined(PZEM_RX_PIN) && !defined(PZEM_TX_PIN)
-#define PZEM_RX_PIN D2
-#define PZEM_TX_PIN D1
-#endif
-
-#define EEPROM_SIZE 12
-SoftwareSerial pzemSWSerial(PZEM_RX_PIN, PZEM_TX_PIN);
-PZEM004Tv30 pzem(pzemSWSerial);
-
 WiFiClient espClient;
 PubSubClient client(espClient);
 
@@ -143,7 +134,6 @@ void mqttReconnect() {
 void setup() {
   Serial.begin(115200);
   setup_wifi ();
-  EEPROM.begin(EEPROM_SIZE);
   client.setServer(mqtt_server, 1883);
   client.setCallback(mqttCallback);
   scale.begin(deviceDout, deviceSck);  
